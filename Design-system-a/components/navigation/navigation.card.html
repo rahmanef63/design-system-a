@@ -1,0 +1,71 @@
+<!-- @dsCard group="Components" viewport="700x420" subtitle="NavItem (rail + menu) · Breadcrumb · Tabs" name="Navigation" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; padding: 22px; background: var(--background); }
+  .grp { margin-bottom: 22px; }
+  .h { font: 700 10px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--subtle-foreground); margin: 0 0 10px; }
+  .rail { display: flex; gap: 6px; background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; padding: 8px; width: max-content; }
+  .side { width: 240px; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; padding: 8px; }
+  .fallback { font-family: var(--font-mono); font-size: 12px; color: var(--muted-foreground); border: 1.5px dashed var(--border); border-radius: 10px; padding: 16px; }
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+function findDS() {
+  const known = ["NavItem","Breadcrumb","Tabs","Button","Card","NavigationRail","AppShell"];
+  const cands = [window];
+  for (const k of Object.getOwnPropertyNames(window)) { let v; try { v = window[k]; } catch (e) { continue; } if (v && typeof v === "object") cands.push(v); }
+  let best = {}, score = -1;
+  for (const c of cands) { let s = 0; for (const n of known) if (typeof c[n] === "function") s++; if (s > score) { score = s; best = c; } }
+  return best;
+}
+const DS = findDS();
+const { NavItem, Breadcrumb, Tabs } = DS;
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+function Demo() {
+  const [tab, setTab] = React.useState("all");
+  return (
+    <div>
+      <div className="grp">
+        <p className="h">NavItem — rail tiles (vertical)</p>
+        <div className="rail">
+          <NavItem orientation="vertical" icon="+" label="Buat" accent />
+          <NavItem orientation="vertical" icon="B" label="Beranda" active />
+          <NavItem orientation="vertical" icon="P" label="Proyek" />
+          <NavItem orientation="vertical" icon="M" label="Merek" crown />
+        </div>
+      </div>
+      <div className="grp">
+        <p className="h">NavItem — menu rows (horizontal) + Breadcrumb</p>
+        <div className="side">
+          <Breadcrumb path={["Semua Template Merek"]} onBack={() => {}} />
+          <div style={{ height: 8 }} />
+          <NavItem orientation="horizontal" icon="◦" label="Semua aset" active />
+          <NavItem orientation="horizontal" icon="◦" label="Template Merek" badge="Baru" />
+          <NavItem orientation="horizontal" icon="◦" label="Logo" />
+          <NavItem orientation="horizontal" label="Tema" chevron />
+        </div>
+      </div>
+      <div className="grp">
+        <p className="h">Tabs</p>
+        <Tabs tabs={[{ key: "all", label: "Semua" }, { key: "mine", label: "Milik saya" }, { key: "shared", label: "Dibagikan" }]} value={tab} onChange={setTab} />
+      </div>
+    </div>
+  );
+}
+
+if (typeof NavItem === "function") root.render(<Demo />);
+else document.getElementById("root").innerHTML = '<div class="fallback">Components render once the design-system bundle is compiled (_ds_bundle.js).</div>';
+</script>
+</body>
+</html>

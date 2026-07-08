@@ -1,0 +1,101 @@
+<!-- @dsCard group="Components" viewport="700x520" subtitle="ModalDialog · Drawer · PopoverMenu · ContextMenu · Backdrop · CloseButton" name="Overlay & Surface" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; padding: 22px; background: var(--background); }
+  .grp { margin-bottom: 22px; }
+  .h { font: 700 10px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--subtle-foreground); margin: 0 0 10px; }
+  .rowline { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+  .stage { position: relative; height: 250px; border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--muted); }
+  .fallback { font-family: var(--font-mono); font-size: 12px; color: var(--muted-foreground); border: 1.5px dashed var(--border); border-radius: 10px; padding: 16px; }
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+function findDS() {
+  const known = ["PopoverMenu","ContextMenu","ModalDialog","Drawer","Backdrop","CloseButton","Button","NavItem","NavigationRail","AppShell"];
+  const cands = [window];
+  for (const k of Object.getOwnPropertyNames(window)) { let v; try { v = window[k]; } catch (e) { continue; } if (v && typeof v === "object") cands.push(v); }
+  let best = {}, score = -1;
+  for (const c of cands) { let s = 0; for (const n of known) if (typeof c[n] === "function") s++; if (s > score) { score = s; best = c; } }
+  return best;
+}
+const DS = findDS();
+const { PopoverMenu, ContextMenu, CloseButton } = DS;
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+function Demo() {
+  return (
+    <div>
+      <div className="grp">
+        <p className="h">PopoverMenu · ContextMenu · CloseButton</p>
+        <div className="rowline">
+          <PopoverMenu header="Akun" width={240} items={[
+            { label: "Akun Anda", icon: "◦" },
+            { label: "Pengaturan", icon: "◦" },
+            { label: "Tema", icon: "◦", chevron: true },
+            { divider: true },
+            { label: "Keluar dari semua akun", icon: "◦" },
+          ]} />
+          <div style={{ position: "relative", height: 200, width: 200, border: "1.5px dashed var(--border)", borderRadius: 12, display: "grid", placeItems: "start" }}>
+            <div style={{ padding: 10 }}><ContextMenu items={[
+              { label: "Ganti nama" }, { label: "Duplikat" }, { label: "Bagikan" },
+              { divider: true }, { label: "Hapus", danger: true },
+            ]} /></div>
+          </div>
+          <CloseButton variant="round" />
+          <CloseButton />
+        </div>
+      </div>
+      <div className="grp">
+        <p className="h">ModalDialog &amp; Drawer — click to preview</p>
+        <div className="rowline">
+          <button onClick={() => window.__om && window.__om("modal")} style={btn}>Open ModalDialog</button>
+          <button onClick={() => window.__om && window.__om("drawer")} style={btn}>Open Drawer</button>
+        </div>
+        <div id="ovstage"></div>
+      </div>
+    </div>
+  );
+}
+const btn = { border: "1.5px solid var(--border)", background: "var(--card)", borderRadius: 999, padding: "9px 15px", cursor: "pointer", fontFamily: "var(--font-sans)", fontWeight: 700, fontSize: 13, color: "var(--foreground)" };
+
+// live modal/drawer previews mounted into a portal-ish node
+function Overlays() {
+  const [which, setWhich] = React.useState(null);
+  window.__om = setWhich;
+  const { ModalDialog, Drawer, NavItem, EmptyState } = DS;
+  return (
+    <>
+      {ModalDialog ? (
+        <ModalDialog open={which === "modal"} onClose={() => setWhich(null)} title="Buat desain"
+          nav={["Untuk Anda", "Presentasi", "Media sosial", "Video", "Cetak"].map((l, i) =>
+            <NavItem key={i} orientation="horizontal" icon="◦" label={l} active={i === 0} />)}>
+          <div style={{ fontFamily: "var(--font-sans)", color: "var(--muted-foreground)" }}>Cari format, lalu pilih template…</div>
+        </ModalDialog>
+      ) : null}
+      {Drawer ? (
+        <Drawer open={which === "drawer"} onClose={() => setWhich(null)} title="Notifikasi">
+          {EmptyState ? <EmptyState glyph="◔" body="Notifikasi Anda akan muncul di sini." /> : null}
+        </Drawer>
+      ) : null}
+    </>
+  );
+}
+
+if (typeof PopoverMenu === "function") {
+  root.render(<div><Demo /><Overlays /></div>);
+} else {
+  document.getElementById("root").innerHTML = '<div class="fallback">Components render once the design-system bundle is compiled (_ds_bundle.js).</div>';
+}
+</script>
+</body>
+</html>
