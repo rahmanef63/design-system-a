@@ -1,0 +1,21 @@
+<!-- @dsCard group="Spacing" viewport="700x150" subtitle="Corner radius — sm 6 · md 10 · lg 16 · pill 999" name="Radius" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--background); display: flex; gap: 16px; }
+  .u { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .box { width: 100%; height: 60px; background: var(--card); border: 1.5px solid var(--border-strong); }
+  .n { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); }
+  .n b { display: block; color: var(--foreground); font-family: var(--font-sans); font-size: 13px; }
+</style>
+</head>
+<body>
+  <div class="u"><div class="box" style="border-radius:var(--radius-sm)"></div><span class="n"><b>sm</b>6px</span></div>
+  <div class="u"><div class="box" style="border-radius:var(--radius-md)"></div><span class="n"><b>md</b>10px</span></div>
+  <div class="u"><div class="box" style="border-radius:var(--radius-lg)"></div><span class="n"><b>lg</b>16px</span></div>
+  <div class="u"><div class="box" style="border-radius:var(--radius-pill)"></div><span class="n"><b>pill</b>999px</span></div>
+</body>
+</html>

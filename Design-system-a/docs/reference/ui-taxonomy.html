@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interactive UI/UX Taxonomy — Canva-style Website Anatomy</title>
+  <style>
+    :root{
+      --bg:#111217;
+      --panel:#181a22;
+      --panel-2:#20232d;
+      --panel-3:#292d38;
+      --line:#383d4b;
+      --text:#f2f3f7;
+      --muted:#a9adba;
+      --soft:#d6d9e2;
+      --accent:#8b5cf6;
+      --accent-2:#5eead4;
+      --accent-3:#60a5fa;
+      --danger:#fb7185;
+      --ok:#7dd3fc;
+      --warn:#fbbf24;
+      --radius:18px;
+      --shadow:0 18px 60px rgba(0,0,0,.38);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(94,234,212,.13), transparent 34%),
+        radial-gradient(circle at 84% 0%, rgba(139,92,246,.22), transparent 32%),
+        var(--bg);
+      line-height:1.55;
+    }
+    button,input{font:inherit;color:inherit}
+    button{cursor:pointer}
+    a{color:inherit}
+    .app{display:grid;grid-template-columns:308px minmax(0,1fr);min-height:100vh}
+    .sidebar{
+      position:sticky;top:0;height:100vh;overflow:auto;padding:22px 18px;border-right:1px solid rgba(255,255,255,.08);
+      background:rgba(14,15,20,.76);backdrop-filter: blur(14px);
+    }
+    .brand{display:flex;gap:12px;align-items:center;margin-bottom:20px}
+    .brand-mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#111827);display:grid;place-items:center;box-shadow:0 0 0 1px rgba(255,255,255,.14) inset;font-weight:800}
+    .brand h1{font-size:16px;line-height:1.2;margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px}
+    .search{position:relative;margin-bottom:14px}.search input{width:100%;background:#12141b;border:1px solid var(--line);border-radius:14px;padding:12px 14px 12px 38px;outline:none}.search span{position:absolute;left:13px;top:10px;color:var(--muted)}
+    .toc{display:grid;gap:6px;margin:14px 0 20px}.toc a{display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--soft);font-weight:650;font-size:13px;padding:10px 12px;border-radius:12px}.toc a:hover,.toc a.active{background:rgba(139,92,246,.18);color:#fff}
+    .mini-note{border:1px dashed rgba(255,255,255,.18);border-radius:14px;padding:13px;color:var(--muted);font-size:13px;background:rgba(255,255,255,.03)}
+    main{padding:26px clamp(18px,3vw,44px) 70px;min-width:0}
+    .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin:12px 0 28px}
+    .hero h2{font-size:clamp(30px,5vw,64px);line-height:.98;margin:0;letter-spacing:-.055em;max-width:880px}.hero p{font-size:17px;color:var(--muted);max-width:820px;margin:16px 0 0}.tag{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:8px 12px;color:var(--soft);background:rgba(255,255,255,.05);font-size:13px;white-space:nowrap}
+    .section{margin-top:34px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 14px}.section-title h3{font-size:24px;margin:0;letter-spacing:-.03em}.section-title p{margin:3px 0 0;color:var(--muted);font-size:14px}.panel{background:rgba(24,26,34,.78);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .workspace{display:grid;grid-template-columns:minmax(0,1.5fr) 360px;gap:18px;padding:18px}
+    .modebar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.mode-btn{border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:999px;padding:9px 12px;font-weight:700;font-size:13px}.mode-btn.active{background:rgba(139,92,246,.24);border-color:rgba(139,92,246,.85)}
+    .mock-wrap{min-width:0}.mock-screen{position:relative;height:560px;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:#101116;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+    .mock-screen::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg, rgba(94,234,212,.17), transparent 28%, rgba(139,92,246,.22) 75%, transparent);pointer-events:none}.mock-screen::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom, rgba(255,255,255,.06), transparent 22%, rgba(0,0,0,.18));pointer-events:none}
+    .layer{position:absolute;border:1px solid rgba(255,255,255,.19);background:rgba(43,47,60,.9);border-radius:14px;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;color:#fff;font-size:12px;font-weight:800;letter-spacing:.01em;box-shadow:0 8px 24px rgba(0,0,0,.28);transition:.18s transform,.18s border-color,.18s background;z-index:1}
+    .layer:hover{transform:translateY(-2px);border-color:rgba(94,234,212,.8);background:rgba(48,54,69,.96)}.layer.active{outline:3px solid rgba(94,234,212,.25);border-color:var(--accent-2);background:rgba(34,63,70,.97)}
+    .layer small{display:block;color:var(--muted);font-weight:650;margin-top:2px}.hotnum{position:absolute;top:-10px;left:-10px;width:23px;height:23px;display:grid;place-items:center;border-radius:999px;background:var(--accent);font-size:11px;border:2px solid #111217}.ghost{opacity:.72}.line{position:absolute;height:1px;background:rgba(255,255,255,.16);z-index:0}.chip-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center}.chip-mini{border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:5px 8px;background:rgba(0,0,0,.13);font-size:11px}.card-row{display:flex;gap:8px;width:100%;height:100%;align-items:center;justify-content:center}.mini-card{width:54px;height:72px;background:rgba(255,255,255,.09);border-radius:8px;border:1px solid rgba(255,255,255,.1)}.mini-row{width:90%;height:16px;background:rgba(255,255,255,.11);border-radius:6px;margin:4px auto}.avatar{width:28px;height:28px;border-radius:999px;background:rgba(94,234,212,.5);display:inline-grid;place-items:center;color:#0b0f13;margin-right:5px}
+    .inspector{padding:18px;position:sticky;top:20px;align-self:start;min-width:0}.inspector .eyebrow{color:var(--accent-2);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.inspector h3{font-size:25px;line-height:1.05;margin:7px 0 7px;letter-spacing:-.04em}.inspector .aliases{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.pill{display:inline-flex;gap:6px;align-items:center;border-radius:999px;padding:6px 9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);font-size:12px;color:var(--soft);font-weight:700}.kv{display:grid;gap:12px;margin-top:16px}.kv div{border-top:1px solid rgba(255,255,255,.09);padding-top:12px}.kv b{display:block;margin-bottom:4px}.kv p{margin:0;color:var(--muted);font-size:14px}.code{font-family:var(--mono);background:#0d0f15;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px;white-space:pre-wrap;color:#d7e6ff;font-size:12px;overflow:auto;margin-top:12px}.copy{margin-top:10px;border:0;background:rgba(94,234,212,.16);border:1px solid rgba(94,234,212,.35);border-radius:12px;padding:9px 11px;font-size:12px;font-weight:800}
+    .taxonomy-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.tax-card{padding:16px;min-height:190px}.tax-card h4{margin:0 0 8px;font-size:17px}.tax-card ul{padding-left:18px;margin:10px 0 0;color:var(--muted);font-size:14px}.tax-card .icon{width:38px;height:38px;border-radius:13px;background:rgba(139,92,246,.2);display:grid;place-items:center;margin-bottom:10px;border:1px solid rgba(255,255,255,.1)}
+    .glossary-tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}.filter-btn{border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:999px;padding:8px 10px;font-size:13px;font-weight:750}.filter-btn.active{background:rgba(96,165,250,.18);border-color:rgba(96,165,250,.6)}
+    .glossary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.gloss-card{padding:15px;display:grid;gap:8px}.gloss-card header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.gloss-card h4{font-size:16px;margin:0}.gloss-card p{font-size:13.5px;color:var(--muted);margin:0}.gloss-card .meta{display:flex;gap:6px;flex-wrap:wrap}.kind{border-radius:999px;padding:4px 7px;background:rgba(255,255,255,.07);font-size:11px;color:var(--soft);border:1px solid rgba(255,255,255,.08)}
+    .matrix{overflow:auto}.matrix table{width:100%;border-collapse:collapse;min-width:860px}.matrix th,.matrix td{text-align:left;border-bottom:1px solid rgba(255,255,255,.09);padding:13px 12px;vertical-align:top}.matrix th{color:#fff;font-size:13px;background:rgba(255,255,255,.04)}.matrix td{color:var(--muted);font-size:14px}.matrix td:first-child{color:#fff;font-weight:800}.matrix code{font-family:var(--mono);font-size:12px;color:#d7e6ff;background:#0d0f15;border:1px solid rgba(255,255,255,.1);padding:2px 5px;border-radius:6px;white-space:nowrap}
+    .recipe{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.recipe-card{padding:18px}.recipe-card h4{margin:0 0 8px;font-size:18px}.recipe-card ol{margin:10px 0 0;padding-left:20px;color:var(--muted)}.recipe-card li{margin:8px 0}.callout{border-left:4px solid var(--accent-2);padding:14px 16px;background:rgba(94,234,212,.07);border-radius:12px;color:var(--soft)}
+    .tree{font-family:var(--mono);font-size:13px;color:#d8ddf0;white-space:pre;overflow:auto;padding:18px;background:#0d0f15;border-radius:16px;border:1px solid rgba(255,255,255,.1)}
+    .footer-note{margin-top:28px;color:var(--muted);font-size:13px}.hide{display:none!important}
+    @media (max-width:1100px){.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto}.workspace{grid-template-columns:1fr}.inspector{position:relative}.taxonomy-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.glossary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mock-screen{height:520px}}
+    @media (max-width:720px){main{padding:18px}.hero{display:block}.hero .tag{margin-top:18px}.taxonomy-grid,.glossary-grid,.recipe{grid-template-columns:1fr}.mock-screen{height:580px;min-width:720px}.mock-scroll{overflow:auto;border-radius:22px}.workspace{padding:12px}.sidebar{padding:18px}.hero h2{font-size:38px}.section-title{display:block}.section-title p{margin-bottom:10px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">UI</div>
+        <div>
+          <h1>Canva UI Anatomy</h1>
+          <p>Kamus komponen untuk wireframe &amp; template.</p>
+        </div>
+      </div>
+      <label class="search" aria-label="Cari istilah UI">
+        <span>⌕</span>
+        <input id="globalSearch" placeholder="Cari: sidebar, modal, card..." />
+      </label>
+      <nav class="toc" id="toc">
+        <a href="#map" class="active">🧭 Peta interaktif</a>
+        <a href="#taxonomy">🧱 Kategori komponen</a>
+        <a href="#glossary">📚 Kamus istilah</a>
+        <a href="#matrix">🗂️ Penamaan wireframe</a>
+        <a href="#recipes">🧩 Resep layout</a>
+        <a href="#tree">🌳 Hirarki container</a>
+      </nav>
+      <div class="mini-note">
+        <b>Cara pakai:</b> klik area pada wireframe, lalu lihat nama komponen, fungsi, child, dan contoh class name. Gunakan istilah Inggris untuk design system; gunakan istilah Indonesia untuk briefing tim non-teknis.
+      </div>
+    </aside>
+
+    <main>
+      <section class="hero">
+        <div>
+          <span class="tag">Berdasarkan pola UI dari screenshot Canva web</span>
+          <h2>Kamus UI/UX agar setiap card, menu, container, dan widget punya nama jelas.</h2>
+          <p>Tujuannya bukan meniru Canva mentah-mentah, tapi mengambil <b>pola layout</b>: app shell, navigation rail, sidebar, hero search, carousel, grid, list/table, modal, popover, drawer, dan empty state.</p>
+        </div>
+      </section>
+
+      <section id="map" class="section">
+        <div class="section-title">
+          <div>
+            <h3>Peta interaktif komponen</h3>
+            <p>Pilih mode halaman, lalu klik blok UI untuk melihat definisi dan aturan pemakaiannya.</p>
+          </div>
+        </div>
+        <div class="panel workspace">
+          <div class="mock-wrap">
+            <div class="modebar" id="modebar"></div>
+            <div class="mock-scroll"><div class="mock-screen" id="mockScreen" aria-label="Interactive wireframe"></div></div>
+          </div>
+          <aside class="panel inspector" id="inspector"></aside>
+        </div>
+      </section>
+
+      <section id="taxonomy" class="section">
+        <div class="section-title">
+          <div>
+            <h3>6 kategori besar komponen UI</h3>
+            <p>Ini struktur kategori yang bisa dipakai untuk semua project: dashboard, CMS, marketplace, ERP, social media tools, atau AI app.</p>
+          </div>
+        </div>
+        <div class="taxonomy-grid">
+          <article class="panel tax-card"><div class="icon">🏗️</div><h4>1. Structure / Layout</h4><p class="muted">Kerangka utama layar.</p><ul><li>App Shell</li><li>Navigation Rail</li><li>Sidebar</li><li>Main Content</li><li>Panel / Drawer</li></ul></article>
+          <article class="panel tax-card"><div class="icon">🧭</div><h4>2. Navigation</h4><p class="muted">Cara user pindah area.</p><ul><li>Primary Nav</li><li>Secondary Nav</li><li>Breadcrumb</li><li>Tabs</li><li>Menu Item</li></ul></article>
+          <article class="panel tax-card"><div class="icon">⚡</div><h4>3. Action / Input</h4><p class="muted">Cara user memberi perintah.</p><ul><li>Button</li><li>Search Bar</li><li>Filter Chip</li><li>Dropdown</li><li>Command Input</li></ul></article>
+          <article class="panel tax-card"><div class="icon">🃏</div><h4>4. Content Display</h4><p class="muted">Cara data ditampilkan.</p><ul><li>Card</li><li>Tile</li><li>List Item</li><li>Table Row</li><li>Carousel</li></ul></article>
+          <article class="panel tax-card"><div class="icon">💬</div><h4>5. Feedback / Status</h4><p class="muted">Memberi konteks kondisi sistem.</p><ul><li>Badge</li><li>Tooltip</li><li>Empty State</li><li>Toast</li><li>Progress</li></ul></article>
+          <article class="panel tax-card"><div class="icon">🪟</div><h4>6. Overlay / Surface</h4><p class="muted">Layer di atas halaman utama.</p><ul><li>Modal Dialog</li><li>Popover</li><li>Context Menu</li><li>Right Panel</li><li>Backdrop</li></ul></article>
+        </div>
+      </section>
+
+      <section id="glossary" class="section">
+        <div class="section-title">
+          <div>
+            <h3>Kamus istilah komponen</h3>
+            <p>Search dan filter istilah yang sering muncul di interface seperti Canva.</p>
+          </div>
+        </div>
+        <div class="glossary-tools">
+          <button class="filter-btn active" data-filter="all">Semua</button>
+          <button class="filter-btn" data-filter="layout">Layout</button>
+          <button class="filter-btn" data-filter="nav">Navigation</button>
+          <button class="filter-btn" data-filter="display">Display</button>
+          <button class="filter-btn" data-filter="input">Input</button>
+          <button class="filter-btn" data-filter="overlay">Overlay</button>
+          <button class="filter-btn" data-filter="status">Status</button>
+        </div>
+        <div class="glossary-grid" id="glossaryGrid"></div>
+      </section>
+
+      <section id="matrix" class="section">
+        <div class="section-title">
+          <div>
+            <h3>Template penamaan untuk wireframe</h3>
+            <p>Gunakan pola ini agar konsisten saat membuat design system atau prompt ke AI/coder.</p>
+          </div>
+        </div>
+        <div class="panel matrix">
+          <table>
+            <thead><tr><th>Nama komponen</th><th>Nama alternatif</th><th>Isi / child umum</th><th>Dipakai saat</th><th>Class name yang rapi</th></tr></thead>
+            <tbody id="matrixRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="recipes" class="section">
+        <div class="section-title">
+          <div>
+            <h3>Resep layout siap pakai</h3>
+            <p>Ambil pola besar Canva, lalu adaptasi untuk project berbeda.</p>
+          </div>
+        </div>
+        <div class="recipe">
+          <article class="panel recipe-card"><h4>Dashboard / Semua Proyek</h4><ol><li>App Shell: rail kiri + area utama.</li><li>Page Header: title + search besar + filter chips.</li><li>Recent Strip: carousel desain terbaru.</li><li>Data View: table/list untuk file lengkap.</li><li>Actions: sort, grid/list toggle, create button.</li></ol></article>
+          <article class="panel recipe-card"><h4>Create Flow / Buat Desain</h4><ol><li>Trigger dari primary action.</li><li>Backdrop menggelapkan layar lama.</li><li>Modal besar berisi search command.</li><li>Left Category Nav untuk kategori format.</li><li>Template tiles dan quick actions sebagai isi modal.</li></ol></article>
+          <article class="panel recipe-card"><h4>Template Gallery</h4><ol><li>Hero search untuk eksplorasi.</li><li>Category chips di bawah search.</li><li>Browse category grid.</li><li>Section carousel untuk rekomendasi.</li><li>CTA “lihat semua” per section.</li></ol></article>
+          <article class="panel recipe-card"><h4>Assistant / AI Panel</h4><ol><li>Secondary sidebar untuk chat history.</li><li>Main empty state dengan command input.</li><li>Mode chips: Desain, Gambar, Doc, Kode.</li><li>Right assistant panel jika butuh bantuan kontekstual.</li><li>Disclaimer kecil untuk akurasi AI.</li></ol></article>
+        </div>
+        <div class="callout" style="margin-top:14px"><b>Prinsip cepat:</b> Card menampilkan satu objek. Section mengelompokkan banyak card. Container membungkus section. Page menata beberapa container. App Shell membungkus seluruh aplikasi.</div>
+      </section>
+
+      <section id="tree" class="section">
+        <div class="section-title">
+          <div>
+            <h3>Hirarki container yang aman dipakai di semua project</h3>
+            <p>Gunakan ini saat bikin wireframe, PRD frontend, atau prompt HTML/React.</p>
+          </div>
+        </div>
+        <div class="tree">AppShell
+├─ NavigationRail / PrimarySidebar
+│  ├─ BrandArea
+│  ├─ PrimaryNavGroup
+│  │  └─ NavItem
+│  └─ UserDock / UtilityDock
+├─ SecondarySidebar optional
+│  ├─ SidebarHeader
+│  ├─ SidebarSection
+│  │  └─ MenuItem / MiniListItem
+│  └─ SidebarFooter
+├─ MainRegion
+│  ├─ PageHeader / HeroHeader
+│  │  ├─ PageTitle
+│  │  ├─ GlobalSearch / CommandInput
+│  │  └─ FilterBar / QuickActionBar
+│  ├─ ContentSection
+│  │  ├─ SectionHeader
+│  │  └─ CardGrid / Carousel / DataTable / ListView
+│  └─ FloatingActionButton / HelpButton
+├─ RightPanel optional
+│  ├─ PanelHeader
+│  ├─ PanelBody
+│  └─ PanelInput / PanelFooter
+└─ OverlayLayer optional
+   ├─ Backdrop
+   ├─ ModalDialog / Drawer / Popover / ContextMenu
+   └─ CloseButton</div>
+      </section>
+
+      <p class="footer-note">Catatan: istilah di atas adalah nama pola UI umum. Untuk design system, lebih baik konsisten memakai nama Inggris seperti <code>NavigationRail</code>, <code>ContentSection</code>, <code>TemplateCard</code>, dan <code>CommandInput</code>, lalu beri label Indonesia untuk dokumentasi user-facing.</p>
+    </main>
+  </div>
+
+<script>
+const components = {
+  appShell:{id:'appShell',cat:'layout',name:'App Shell',idName:'Kerangka Aplikasi',aliases:['Page Frame','Application Layout','Workspace Shell'],what:'Container paling luar yang menahan seluruh struktur aplikasi: navigation, sidebar, main content, panel, dan overlay.',when:'Dipakai untuk aplikasi yang punya banyak halaman/fitur dan membutuhkan navigasi konsisten.',children:'NavigationRail, SecondarySidebar, MainRegion, RightPanel, OverlayLayer.',className:'app-shell / dashboard-shell / workspace-shell'},
+  navRail:{id:'navRail',cat:'nav',name:'Navigation Rail',idName:'Menu Ikon Vertikal',aliases:['Primary Rail','Icon Sidebar','Left Rail'],what:'Navigasi utama tipis di kiri berisi ikon fitur besar seperti Beranda, Proyek, Template, Merek, AI, Cetak.',when:'Cocok untuk aplikasi kompleks karena hemat lebar dan tetap selalu terlihat.',children:'Logo, create button, nav item, notification, user avatar.',className:'navigation-rail / primary-nav-rail'},
+  secondarySidebar:{id:'secondarySidebar',cat:'nav',name:'Secondary Sidebar',idName:'Sidebar Detail',aliases:['Expanded Sidebar','Context Sidebar','Sub Navigation'],what:'Panel kiri kedua yang muncul untuk menu turunan, daftar recent item, kategori, atau pengaturan halaman aktif.',when:'Dipakai saat satu menu utama punya banyak subfitur atau perlu list cepat.',children:'Sidebar header, menu group, menu item, hint card, footer item.',className:'secondary-sidebar / contextual-sidebar'},
+  mainRegion:{id:'mainRegion',cat:'layout',name:'Main Region',idName:'Area Konten Utama',aliases:['Main Content','Canvas Area','Workspace'],what:'Area utama tempat user bekerja, mencari, melihat desain, memilih template, atau berinteraksi dengan AI.',when:'Selalu ada di layout aplikasi. Semua section utama masuk ke sini.',children:'PageHeader, ContentSection, Table, CardGrid, Carousel.',className:'main-region / page-content / workspace-main'},
+  heroHeader:{id:'heroHeader',cat:'layout',name:'Hero Header',idName:'Header Besar Halaman',aliases:['Page Hero','Landing Header','Top Banner'],what:'Area atas halaman yang menonjolkan judul, search besar, CTA, atau pesan utama.',when:'Dipakai untuk halaman eksplorasi seperti Home, Projects, Templates, Print Catalog.',children:'Page title, subtitle, global search, quick actions, promo button.',className:'hero-header / page-hero'},
+  commandSearch:{id:'commandSearch',cat:'input',name:'Command Search / Global Search',idName:'Search Besar',aliases:['Search Bar','Command Input','Omnibox'],what:'Input utama untuk mencari konten, template, folder, file, atau menjalankan perintah cepat.',when:'Dipakai ketika user harus menemukan banyak objek atau memulai pekerjaan dari satu titik.',children:'Search icon, placeholder, input field, shortcut/microphone optional.',className:'command-search / global-search / search-omnibox'},
+  quickActions:{id:'quickActions',cat:'input',name:'Quick Action Bar',idName:'Bar Aksi Cepat',aliases:['Shortcut Launcher','Action Pills','Feature Shortcuts'],what:'Deretan shortcut berbentuk ikon/chip untuk membuat desain, presentasi, dokumen, video, atau format lain.',when:'Dipakai untuk mempercepat tindakan yang paling sering dilakukan.',children:'Action icon, label, badge baru, separator.',className:'quick-action-bar / shortcut-strip'},
+  section:{id:'section',cat:'layout',name:'Content Section',idName:'Seksi Konten',aliases:['Section Block','Content Group','Module'],what:'Container yang mengelompokkan konten dengan judul seperti Desain Terbaru, Populer, Coba Hal Baru.',when:'Dipakai untuk membagi halaman panjang menjadi kelompok yang mudah dipindai.',children:'Section header, action link, carousel, grid, table, empty state.',className:'content-section / module-section'},
+  carousel:{id:'carousel',cat:'display',name:'Carousel / Horizontal Scroller',idName:'Daftar Geser Horizontal',aliases:['Horizontal List','Content Rail','Strip'],what:'Kumpulan card yang bisa digeser kiri-kanan, biasanya untuk rekomendasi atau item terbaru.',when:'Dipakai saat banyak item, tapi ruang vertikal ingin dihemat.',children:'Carousel viewport, card, next/prev button, fade edge.',className:'content-carousel / horizontal-scroller'},
+  card:{id:'card',cat:'display',name:'Card / Tile',idName:'Kartu Konten',aliases:['Tile','Template Card','Project Card'],what:'Unit konten mandiri yang menampilkan satu objek: desain, template, dokumen, produk, atau fitur.',when:'Dipakai untuk galeri, rekomendasi, katalog, atau list visual.',children:'Thumbnail, title, metadata, badge, avatar, action menu.',className:'content-card / template-card / project-card'},
+  table:{id:'table',cat:'display',name:'Data Table / List View',idName:'Tampilan Tabel/Daftar',aliases:['Recent List','File Table','Resource List'],what:'Tampilan daftar dengan kolom seperti Nama, Orang, Jenis, Diedit.',when:'Dipakai untuk data yang butuh scan cepat, sorting, dan aksi per baris.',children:'Table header, row, cell, thumbnail, metadata, row actions.',className:'data-table / file-list / recent-table'},
+  filters:{id:'filters',cat:'input',name:'Filter Bar',idName:'Bar Filter',aliases:['Filter Chips','Toolbar Filters','Facet Controls'],what:'Kontrol untuk menyaring atau mengurutkan konten berdasarkan jenis, kategori, pemilik, tanggal.',when:'Dipakai saat list/grid memiliki banyak item dan user perlu mempersempit hasil.',children:'Dropdown button, chip, sort control, view toggle.',className:'filter-bar / content-toolbar'},
+  viewToggle:{id:'viewToggle',cat:'input',name:'View Toggle',idName:'Pengubah Tampilan',aliases:['Grid/List Toggle','Display Switcher'],what:'Kontrol untuk mengganti cara melihat data, misalnya grid vs list.',when:'Dipakai ketika user bisa memilih antara tampilan visual dan tampilan detail.',children:'Icon button, active state.',className:'view-toggle / layout-switcher'},
+  fab:{id:'fab',cat:'input',name:'Floating Action Button',idName:'Tombol Mengambang',aliases:['FAB','Help Button','Create Button'],what:'Tombol aksi utama yang mengambang, misalnya tambah, bantuan, atau buat baru.',when:'Dipakai untuk aksi penting yang harus mudah dicapai tanpa mengganggu konten.',children:'Icon, tooltip, label optional.',className:'floating-action-button / help-fab'},
+  modal:{id:'modal',cat:'overlay',name:'Modal Dialog',idName:'Pop-up Besar',aliases:['Dialog','Create Dialog','Overlay Modal'],what:'Layer besar di atas halaman utama untuk flow fokus seperti Buat Desain.',when:'Dipakai saat user harus menyelesaikan pilihan penting tanpa pindah halaman penuh.',children:'Backdrop, modal surface, close button, modal nav, search, content grid.',className:'modal-dialog / create-design-modal'},
+  backdrop:{id:'backdrop',cat:'overlay',name:'Backdrop',idName:'Latar Gelap Overlay',aliases:['Scrim','Overlay Background'],what:'Lapisan transparan yang menggelapkan halaman di belakang modal/drawer.',when:'Dipakai untuk menandakan fokus pindah ke modal atau overlay.',children:'Biasanya tidak punya child.',className:'backdrop / overlay-scrim'},
+  popover:{id:'popover',cat:'overlay',name:'Popover Menu',idName:'Menu Melayang Kecil',aliases:['Dropdown Panel','Flyout','Account Menu'],what:'Panel kecil yang muncul dari tombol, berisi opsi akun, notifikasi, kategori lain, atau aksi tambahan.',when:'Dipakai untuk opsi kontekstual yang tidak perlu halaman penuh.',children:'Menu item, divider, avatar, shortcut, nested arrow.',className:'popover-menu / account-popover / more-menu'},
+  rightPanel:{id:'rightPanel',cat:'overlay',name:'Right Panel / Assistant Panel',idName:'Panel Kanan',aliases:['Side Panel','Inspector Panel','Help Panel'],what:'Panel di kanan untuk bantuan, inspector, chat AI, atau detail objek tanpa meninggalkan halaman.',when:'Dipakai ketika user perlu konteks tambahan sambil tetap melihat halaman utama.',children:'Panel header, panel body, input, CTA, close button.',className:'right-panel / assistant-panel'},
+  badge:{id:'badge',cat:'status',name:'Badge / Pill',idName:'Label Kecil',aliases:['Chip','Status Label','Tag'],what:'Label kecil untuk status seperti Baru, Private, Pro, Beta, atau kategori.',when:'Dipakai untuk memberi sinyal cepat tanpa paragraf panjang.',children:'Icon optional, text.',className:'badge / status-pill / label-chip'},
+  emptyState:{id:'emptyState',cat:'status',name:'Empty State',idName:'Kondisi Kosong',aliases:['Blank State','No Data State'],what:'Tampilan ketika belum ada data, misalnya notifikasi kosong atau chat baru.',when:'Dipakai agar layar kosong tetap memberi arahan tindakan berikutnya.',children:'Illustration, message, helper text, CTA.',className:'empty-state / blank-state'},
+  contextMenu:{id:'contextMenu',cat:'overlay',name:'Context Menu / More Actions',idName:'Menu Titik Tiga',aliases:['Kebab Menu','Overflow Menu','Row Actions'],what:'Menu tindakan tambahan pada card atau row: rename, duplicate, share, delete, star.',when:'Dipakai agar aksi jarang dipakai tidak memenuhi UI utama.',children:'Icon button, menu items, destructive item optional.',className:'context-menu / overflow-menu'}
+};
+const modes = {
+  home:{label:'Beranda',items:['appShell','navRail','secondarySidebar','mainRegion','heroHeader','commandSearch','quickActions','section','table','filters','fab','rightPanel'],layers:[
+    ['appShell','2%','2%','96%','96%','ghost'],['navRail','2%','2%','5%','96%'],['secondarySidebar','7.5%','2%','16%','96%'],['mainRegion','24%','2%','74%','96%'],['heroHeader','30%','7%','58%','24%'],['commandSearch','36%','17%','42%','8%'],['quickActions','30%','34%','60%','10%'],['section','28%','51%','64%','40%'],['filters','70%','46%','20%','6%'],['table','30%','64%','58%','23%'],['fab','93%','89%','4%','6%'],['rightPanel','76%','2%','22%','96%','ghost']]
+  },
+  projects:{label:'Proyek',items:['appShell','navRail','secondarySidebar','mainRegion','heroHeader','commandSearch','filters','carousel','card','table','viewToggle','contextMenu','badge'],layers:[
+    ['appShell','2%','2%','96%','96%','ghost'],['navRail','2%','2%','5%','96%'],['secondarySidebar','7.5%','2%','16%','96%'],['mainRegion','24%','2%','74%','96%'],['heroHeader','34%','7%','48%','25%'],['commandSearch','38%','17%','40%','8%'],['filters','45%','30%','31%','7%'],['carousel','27%','47%','65%','16%'],['card','31%','50%','12%','10%'],['table','27%','70%','65%','18%'],['viewToggle','87%','40%','6%','6%'],['contextMenu','87%','80%','5%','6%'],['badge','61%','79%','7%','4%']]
+  },
+  templates:{label:'Template',items:['appShell','navRail','secondarySidebar','mainRegion','heroHeader','commandSearch','quickActions','section','carousel','card'],layers:[
+    ['appShell','2%','2%','96%','96%','ghost'],['navRail','2%','2%','5%','96%'],['secondarySidebar','7.5%','2%','16%','96%'],['mainRegion','24%','2%','74%','96%'],['heroHeader','34%','7%','45%','24%'],['commandSearch','38%','17%','37%','8%'],['quickActions','43%','30%','28%','7%'],['section','27%','42%','66%','20%'],['carousel','27%','67%','66%','24%'],['card','31%','70%','9%','17%']]
+  },
+  createModal:{label:'Create modal',items:['backdrop','modal','commandSearch','secondarySidebar','quickActions','section','card','carousel'],layers:[
+    ['backdrop','2%','2%','96%','96%'],['modal','8%','8%','84%','84%'],['secondarySidebar','10%','16%','17%','66%'],['commandSearch','28%','12%','56%','8%'],['quickActions','28%','26%','40%','12%'],['section','28%','43%','58%','17%'],['card','32%','47%','13%','10%'],['carousel','28%','69%','58%','16%']]
+  },
+  brandKit:{label:'Brand kit',items:['appShell','navRail','secondarySidebar','mainRegion','heroHeader','section','card','badge','fab'],layers:[
+    ['appShell','2%','2%','96%','96%','ghost'],['navRail','2%','2%','5%','96%'],['secondarySidebar','7.5%','2%','18%','96%'],['mainRegion','27%','2%','71%','96%'],['heroHeader','32%','10%','58%','22%'],['section','30%','39%','64%','46%'],['card','33%','45%','16%','16%'],['badge','77%','50%','6%','4%'],['fab','93%','89%','4%','6%']]
+  },
+  popovers:{label:'Popovers',items:['navRail','popover','emptyState','contextMenu','badge','fab'],layers:[
+    ['navRail','2%','2%','6%','96%'],['popover','9%','8%','23%','42%'],['popover','9%','58%','25%','28%'],['emptyState','35%','18%','30%','46%'],['contextMenu','70%','34%','16%','30%'],['badge','23%','72%','8%','5%'],['fab','5%','88%','5%','7%']]
+  }
+};
+const glossary = [
+  ['App Shell','layout','Kerangka seluruh aplikasi: rail, sidebar, content, overlay.','appShell'],
+  ['Navigation Rail','nav','Sidebar ikon vertikal untuk fitur utama.','navRail'],
+  ['Secondary Sidebar','nav','Sidebar turunan berisi kategori, recent item, atau sub menu.','secondarySidebar'],
+  ['Main Region','layout','Area kerja utama tempat konten tampil.','mainRegion'],
+  ['Hero Header','layout','Header besar dengan judul/search/CTA.','heroHeader'],
+  ['Command Search','input','Search besar untuk mencari atau memulai aksi.','commandSearch'],
+  ['Quick Action Bar','input','Deretan shortcut aksi cepat.','quickActions'],
+  ['Content Section','layout','Kelompok konten dengan section title.','section'],
+  ['Card / Tile','display','Unit konten mandiri dengan thumbnail dan metadata.','card'],
+  ['Carousel','display','List horizontal yang bisa digeser.','carousel'],
+  ['Data Table','display','Tampilan daftar berkolom untuk data detail.','table'],
+  ['Filter Bar','input','Kontrol filter/sort di atas list atau grid.','filters'],
+  ['View Toggle','input','Pengubah tampilan grid/list.','viewToggle'],
+  ['Modal Dialog','overlay','Pop-up fokus di atas halaman utama.','modal'],
+  ['Backdrop','overlay','Latar gelap di belakang modal.','backdrop'],
+  ['Popover','overlay','Menu kecil yang muncul dari tombol.','popover'],
+  ['Right Panel','overlay','Panel kanan untuk detail, bantuan, atau AI chat.','rightPanel'],
+  ['Badge / Pill','status','Label kecil untuk status atau kategori.','badge'],
+  ['Empty State','status','Tampilan ketika data kosong.','emptyState'],
+  ['Context Menu','overlay','Menu titik tiga untuk aksi tambahan.','contextMenu'],
+  ['FAB','input','Floating action button untuk aksi penting.','fab']
+];
+const screen = document.getElementById('mockScreen');
+const inspector = document.getElementById('inspector');
+const modebar = document.getElementById('modebar');
+let activeMode='home';
+let activeId='appShell';
+function labelFor(id){return components[id]?.name || id}
+function renderModeButtons(){Object.entries(modes).forEach(([key,m])=>{const b=document.createElement('button');b.className='mode-btn'+(key===activeMode?' active':'');b.textContent=m.label;b.onclick=()=>{activeMode=key;activeId=m.items[0];renderAll()};modebar.appendChild(b)})}
+function contentInside(id){
+  if(id==='quickActions') return '<div class="chip-row"><span class="chip-mini">Template</span><span class="chip-mini">Doc</span><span class="chip-mini">Video</span><span class="chip-mini">Email</span></div>';
+  if(id==='carousel') return '<div class="card-row"><span class="mini-card"></span><span class="mini-card"></span><span class="mini-card"></span><span class="mini-card"></span></div>';
+  if(id==='table') return '<div style="width:100%"><div class="mini-row"></div><div class="mini-row"></div><div class="mini-row"></div><div class="mini-row"></div></div>';
+  if(id==='card') return '<div><span class="avatar">◧</span><br>Card / Tile</div>';
+  if(id==='filters') return '<div class="chip-row"><span class="chip-mini">Jenis</span><span class="chip-mini">Pemilik</span><span class="chip-mini">Tanggal</span></div>';
+  return `<div>${labelFor(id)}<small>${components[id]?.idName||''}</small></div>`;
+}
+function renderScreen(){screen.innerHTML='';modes[activeMode].layers.forEach((l,i)=>{const [id,left,top,width,height,extra='']=l;const el=document.createElement('button');el.className=`layer ${extra} ${id===activeId?'active':''}`;el.style.left=left;el.style.top=top;el.style.width=width;el.style.height=height;el.setAttribute('data-id',id);el.innerHTML=`<span class="hotnum">${i+1}</span>${contentInside(id)}`;el.onclick=()=>{activeId=id;renderScreen();renderInspector()};screen.appendChild(el)});}
+function renderInspector(){const c=components[activeId];if(!c){return}inspector.innerHTML=`
+  <div class="eyebrow">${c.cat} component</div>
+  <h3>${c.name}</h3>
+  <p style="margin:0;color:var(--muted)">${c.idName}</p>
+  <div class="aliases">${c.aliases.map(a=>`<span class="pill">${a}</span>`).join('')}</div>
+  <div class="kv">
+    <div><b>Fungsi</b><p>${c.what}</p></div>
+    <div><b>Kapan dipakai</b><p>${c.when}</p></div>
+    <div><b>Child umum</b><p>${c.children}</p></div>
+    <div><b>Nama class/design token</b><p><code>${c.className}</code></p></div>
+  </div>
+  <pre class="code" id="copyTarget">// Wireframe spec
+component: ${c.name}
+label_id: ${c.idName}
+role: ${c.what}
+children: ${c.children}
+className: ${c.className}</pre>
+  <button class="copy" onclick="navigator.clipboard.writeText(document.getElementById('copyTarget').innerText); this.textContent='Tersalin'; setTimeout(()=>this.textContent='Copy spec',1200)">Copy spec</button>
+`;}
+function renderGlossary(){const grid=document.getElementById('glossaryGrid');grid.innerHTML='';const term=document.getElementById('globalSearch').value.toLowerCase().trim();const activeFilter=document.querySelector('.filter-btn.active')?.dataset.filter || 'all';glossary.forEach(([name,cat,desc,id])=>{const hay=(name+' '+cat+' '+desc+' '+(components[id]?.aliases||[]).join(' ')).toLowerCase();if((activeFilter!=='all'&&cat!==activeFilter)||(term&& !hay.includes(term))) return;const c=components[id];const article=document.createElement('article');article.className='panel gloss-card';article.innerHTML=`<header><h4>${name}</h4><span class="kind">${cat}</span></header><p>${desc}</p><div class="meta">${(c.aliases||[]).slice(0,3).map(a=>`<span class="kind">${a}</span>`).join('')}</div>`;article.onclick=()=>{activeId=id;location.hash='map';renderAll()};grid.appendChild(article);});if(!grid.children.length){grid.innerHTML='<article class="panel gloss-card"><h4>Tidak ada hasil</h4><p>Coba istilah lain seperti card, modal, sidebar, search, atau table.</p></article>'}}
+function renderMatrix(){const rows=document.getElementById('matrixRows');rows.innerHTML='';['appShell','navRail','secondarySidebar','heroHeader','commandSearch','quickActions','section','card','carousel','table','filters','modal','popover','rightPanel','emptyState','badge'].forEach(id=>{const c=components[id];const tr=document.createElement('tr');tr.innerHTML=`<td>${c.name}<br><span style="color:var(--muted);font-weight:600">${c.idName}</span></td><td>${c.aliases.join(', ')}</td><td>${c.children}</td><td>${c.when}</td><td><code>${c.className.split(' / ')[0]}</code></td>`;rows.appendChild(tr)})}
+function renderAll(){modebar.innerHTML='';renderModeButtons();renderScreen();renderInspector();renderGlossary();renderMatrix()}
+document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderGlossary()}));
+document.getElementById('globalSearch').addEventListener('input',renderGlossary);
+const sections=[...document.querySelectorAll('main section[id]')];const tocLinks=[...document.querySelectorAll('.toc a')];window.addEventListener('scroll',()=>{let cur='map';sections.forEach(s=>{if(s.getBoundingClientRect().top<160)cur=s.id});tocLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));});
+renderAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!-- @dsCard group="Brand" viewport="720x240" subtitle="Theme presets — same tokens, any project's brand ([data-preset])" name="Theme presets" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 18px; background: var(--background); display: flex; flex-direction: column; gap: 12px; }
+  .row { display: grid; grid-template-columns: 130px 1fr; align-items: center; gap: 14px;
+         border: var(--border-width) solid var(--border); border-radius: var(--radius-lg); padding: 12px 14px; background: var(--card); }
+  .name { display: flex; align-items: center; gap: 9px; }
+  .tile { width: 30px; height: 30px; border-radius: var(--radius-md); background: var(--primary); color: var(--primary-foreground);
+          display: grid; place-items: center; font: 800 13px var(--font-sans); }
+  .name b { font: 700 14px var(--font-sans); color: var(--foreground); }
+  .name span { display: block; font: 500 10px var(--font-mono); color: var(--muted-foreground); }
+  .chips { display: flex; gap: 8px; }
+  .c { flex: 1; height: 40px; border-radius: var(--radius-md); border: var(--border-width) solid var(--border); display: grid; place-items: center;
+       font: 600 10px var(--font-mono); }
+</style>
+</head>
+<body>
+  <div class="row" data-preset="rupa">
+    <div class="name"><span class="tile">R</span><span><b>Rupa</b><span>default · warm</span></span></div>
+    <div class="chips">
+      <div class="c" style="background:var(--background);color:var(--muted-foreground)">bg</div>
+      <div class="c" style="background:var(--primary);color:var(--primary-foreground)">primary</div>
+      <div class="c" style="background:var(--muted);color:var(--muted-foreground)">muted</div>
+      <div class="c" style="background:var(--foreground);color:var(--background)">fg</div>
+    </div>
+  </div>
+  <div class="row" data-preset="modern-minimal">
+    <div class="name"><span class="tile">M</span><span><b>Modern Minimal</b><span>blue · Inter</span></span></div>
+    <div class="chips">
+      <div class="c" style="background:var(--background);color:var(--muted-foreground)">bg</div>
+      <div class="c" style="background:var(--primary);color:var(--primary-foreground)">primary</div>
+      <div class="c" style="background:var(--muted);color:var(--muted-foreground)">muted</div>
+      <div class="c" style="background:var(--foreground);color:var(--background)">fg</div>
+    </div>
+  </div>
+  <div class="row" data-preset="emerald">
+    <div class="name"><span class="tile">E</span><span><b>Emerald</b><span>green · Inter</span></span></div>
+    <div class="chips">
+      <div class="c" style="background:var(--background);color:var(--muted-foreground)">bg</div>
+      <div class="c" style="background:var(--primary);color:var(--primary-foreground)">primary</div>
+      <div class="c" style="background:var(--muted);color:var(--muted-foreground)">muted</div>
+      <div class="c" style="background:var(--foreground);color:var(--background)">fg</div>
+    </div>
+  </div>
+</body>
+</html>

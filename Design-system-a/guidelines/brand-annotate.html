@@ -1,0 +1,20 @@
+<!-- @dsCard group="Brand" viewport="700x150" subtitle="Anatomy annotation — mono tag naming every region (annotate mode)" name="Annotation tags" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 22px; background: var(--background); display: flex; gap: 14px; align-items: center; }
+  .region { position: relative; flex: 1; height: 84px; border: 1.5px dashed var(--border-strong); border-radius: var(--radius-md); background: var(--card); }
+  .tag-ink { position: absolute; top: -9px; left: 8px; font: 700 8px var(--font-mono); background: var(--foreground); color: var(--card); padding: 2px 6px; border-radius: var(--radius-sm); }
+  .tag-acc { position: absolute; top: -9px; left: 8px; font: 700 8px var(--font-mono); background: var(--primary); color: var(--primary-foreground); padding: 2px 6px; border-radius: var(--radius-sm); }
+  .cap { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+</style>
+</head>
+<body>
+  <div class="region"><span class="tag-ink">MainRegion</span></div>
+  <div class="region"><span class="tag-acc">CommandSearch</span></div>
+  <span class="cap">ink&nbsp;tag&nbsp;=&nbsp;container<br>accent&nbsp;tag&nbsp;=&nbsp;interactive</span>
+</body>
+</html>

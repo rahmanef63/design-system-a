@@ -1,0 +1,24 @@
+<!-- @dsCard group="Colors" viewport="700x160" subtitle="Dark theme — same tokens re-declared under [data-theme=dark]" name="Dark theme" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 0; }
+  .wrap { padding: 18px; background: var(--background); display: flex; gap: 12px; }
+  .sw { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .chip { height: 62px; border-radius: var(--radius-md); border: 1.5px solid var(--border); display: grid; place-items: center; font-family: var(--font-sans); font-size: 20px; color: var(--foreground); }
+  .lbl { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); line-height: 1.4; }
+  .lbl b { display: block; color: var(--foreground); font-family: var(--font-sans); font-size: 13px; }
+</style>
+</head>
+<body data-theme="dark">
+  <div class="wrap">
+    <div class="sw"><div class="chip" style="background:var(--background)">Aa</div><span class="lbl"><b>--background</b>#262624</span></div>
+    <div class="sw"><div class="chip" style="background:var(--card)">Aa</div><span class="lbl"><b>--card</b>#30302E</span></div>
+    <div class="sw"><div class="chip" style="background:var(--muted)">Aa</div><span class="lbl"><b>--muted</b>#3B3A37</span></div>
+    <div class="sw"><div class="chip" style="background:var(--primary);color:var(--primary-foreground);border:0">Aa</div><span class="lbl"><b>--primary</b>#D97757</span></div>
+  </div>
+</body>
+</html>

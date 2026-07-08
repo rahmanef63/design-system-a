@@ -1,0 +1,49 @@
+<!-- @dsCard group="Design Platform" viewport="1280x800" subtitle="Interactive Rupa wireframe — rail nav, 6 screens, overlays" name="Design Platform" -->
+<!-- @startingPoint section="Screens" subtitle="Full Canva-style platform wireframe (interactive)" viewport="1280x800" -->
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rupa — Design Platform Wireframe</title>
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  html, body { margin: 0; height: 100%; background: var(--background); }
+  #root { height: 100%; }
+  .fallback { font-family: var(--font-mono); font-size: 13px; color: var(--muted-foreground); border: 1.5px dashed var(--border); border-radius: 12px; padding: 20px; margin: 24px; max-width: 520px; }
+  /* Responsive hooks present in the composed screens. Full responsive
+     behaviour is demonstrated in the interactive reference DC. */
+  @media (max-width: 900px) { [data-r="panel"] { display: none !important; } }
+  @media (max-width: 700px) {
+    [data-r="subwrap"] { flex-direction: column !important; }
+    [data-r="subwrap"] > nav { width: 100% !important; }
+  }
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+function findDS() {
+  const known = ["DesignPlatform","AppShell","NavigationRail","MainRegion","Home","Projects","Templates","CreateModal","Button","Card"];
+  const cands = [window];
+  for (const k of Object.getOwnPropertyNames(window)) { let v; try { v = window[k]; } catch (e) { continue; } if (v && typeof v === "object") cands.push(v); }
+  let best = {}, score = -1;
+  for (const c of cands) { let s = 0; for (const n of known) if (typeof c[n] === "function") s++; if (s > score) { score = s; best = c; } }
+  return best;
+}
+const DS = findDS();
+const { DesignPlatform } = DS;
+
+if (typeof DesignPlatform === "function") {
+  ReactDOM.createRoot(document.getElementById("root")).render(<DesignPlatform theme="light" preset="rupa" />);
+} else {
+  document.getElementById("root").innerHTML =
+    '<div class="fallback"><b>Design Platform wireframe.</b><br><br>This kit mounts from the compiled design-system bundle (_ds_bundle.js). It renders in the Design System tab once the project has compiled. The full interactive reference also lives at <code>Design Platform Wireframe.dc.html</code> in the project root.</div>';
+}
+</script>
+</body>
+</html>
