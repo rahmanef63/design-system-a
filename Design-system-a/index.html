@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en" data-preset="rupa">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rupa Wireframe Design System</title>
+<link rel="stylesheet" href="./styles.css">
+<script>
+  /* restore preset/theme before paint (no flash) */
+  (function () {
+    try {
+      var p = localStorage.getItem("ds-preset"); if (p) document.documentElement.dataset.preset = p;
+      var t = localStorage.getItem("ds-theme"); if (t === "dark") document.documentElement.dataset.theme = "dark";
+    } catch (e) {}
+  })();
+</script>
+<style>
+  body { padding: 0; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px 96px; }
+
+  /* toolbar */
+  .bar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+         padding: 14px 32px; background: color-mix(in srgb, var(--background) 86%, transparent);
+         backdrop-filter: blur(8px); border-bottom: var(--border-width) solid var(--border); }
+  .bar .mk { display: flex; align-items: center; gap: 10px; margin-right: auto; }
+  .bar .tile { width: 34px; height: 34px; border-radius: var(--radius-md); background: var(--primary);
+               color: var(--primary-foreground); display: grid; place-items: center; font: 800 15px var(--font-sans); }
+  .bar .mk b { font: 800 17px var(--font-sans); letter-spacing: -.01em; }
+  .seg { display: flex; gap: 3px; padding: 3px; border: var(--border-width) solid var(--border);
+         border-radius: var(--radius-pill); background: var(--card); }
+  .seg button { border: 0; background: transparent; cursor: pointer; padding: 7px 14px; border-radius: var(--radius-pill);
+                font: 600 12.5px var(--font-sans); color: var(--muted-foreground); }
+  .seg button[aria-pressed="true"] { background: var(--primary); color: var(--primary-foreground); }
+  .icon-btn { width: 38px; height: 38px; border-radius: var(--radius-pill); border: var(--border-width) solid var(--border);
+              background: var(--card); color: var(--foreground); cursor: pointer; font-size: 15px; }
+
+  header.hero { padding: 44px 0 26px; border-bottom: var(--border-width) solid var(--border); margin-bottom: 36px; }
+  header.hero h1 { font: 800 34px/1.1 var(--font-sans); margin: 0 0 10px; letter-spacing: -.02em; }
+  header.hero p { font: 400 15px/1.6 var(--font-sans); color: var(--muted-foreground); max-width: 64ch; margin: 0; }
+
+  .kicker { font: 700 10px var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--subtle-foreground); margin: 0 0 16px; }
+  section.blk { margin-bottom: 44px; }
+
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 12px; }
+  .sw .chip { height: 60px; border-radius: var(--radius-md); border: var(--border-width) solid var(--border); }
+  .sw .lbl { display: block; font: 500 12px var(--font-mono); color: var(--foreground); margin-top: 8px; }
+  .sw .use { display: block; font: 400 10.5px var(--font-sans); color: var(--muted-foreground); }
+
+  .types { display: flex; flex-direction: column; gap: 14px; }
+  .types .r { display: flex; align-items: baseline; gap: 18px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+  .types .r:last-child { border-bottom: 0; }
+  .types .m { flex: none; width: 128px; font: 500 11px var(--font-mono); color: var(--subtle-foreground); }
+
+  .preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .pcard { border: var(--border-width) solid var(--border); border-radius: var(--radius-lg); background: var(--card); padding: 18px; }
+  .pcard h4 { font: 600 11px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--subtle-foreground); margin: 0 0 14px; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 7px; border-radius: var(--radius-pill); padding: 10px 18px;
+         font: 600 13px var(--font-sans); cursor: pointer; border: var(--border-width) solid transparent; }
+  .btn.primary { background: var(--primary); color: var(--primary-foreground); }
+  .btn.outline { background: var(--card); color: var(--foreground); border-color: var(--border); }
+  .btn.ghost { background: transparent; color: var(--muted-foreground); }
+  .input { display: flex; align-items: center; gap: 10px; border: var(--border-width) solid var(--border);
+           border-radius: var(--radius-md); padding: 11px 14px; background: var(--background); font: 400 14px var(--font-sans); color: var(--muted-foreground); }
+  .input .ring { width: 14px; height: 14px; border: 2px solid var(--subtle-foreground); border-radius: 999px; flex: none; }
+  .badge { font: 600 10px var(--font-mono); border-radius: var(--radius-sm); padding: 3px 7px; }
+  .badge.new { background: var(--primary); color: var(--primary-foreground); }
+  .badge.soft { background: var(--primary-soft); color: var(--primary); }
+  .badge.mut { background: var(--muted); color: var(--muted-foreground); border: 1px solid var(--border); }
+  .thumb { aspect-ratio: 16/9; border-radius: var(--radius-md); border: var(--border-width) solid var(--border);
+           display: grid; place-items: center; color: var(--subtle-foreground); font: 500 10px var(--font-mono); }
+  .navpill { display: flex; gap: 6px; }
+  .navpill span { padding: 8px 13px; border-radius: var(--radius-md); font: 600 12.5px var(--font-sans); color: var(--muted-foreground); }
+  .navpill .on { background: var(--primary-soft); color: var(--primary); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 14px; }
+  .card { border: var(--border-width) solid var(--border); border-radius: var(--radius-md); background: var(--card); padding: 16px 18px; }
+  .card h3 { font: 700 16px var(--font-sans); margin: 0 0 4px; }
+  .card p { font: 400 12.5px/1.5 var(--font-sans); color: var(--muted-foreground); margin: 0 0 8px; }
+  .card code { font: 400 10.5px var(--font-mono); color: var(--subtle-foreground); }
+  .pills { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .pill { font: 500 10px var(--font-mono); color: var(--muted-foreground); border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 2px 8px; }
+  .links { display: flex; gap: 10px; flex-wrap: wrap; }
+  a.lk { display: inline-flex; align-items: center; gap: 6px; border: var(--border-width) solid var(--border); border-radius: var(--radius-pill);
+         padding: 9px 15px; font: 600 13px var(--font-sans); color: var(--foreground); background: var(--card); }
+  a.lk.primary { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+  .note { font: 400 12px/1.6 var(--font-mono); color: var(--muted-foreground); border: var(--border-width) dashed var(--border);
+          border-radius: var(--radius-md); padding: 14px 16px; background: var(--card); }
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="mk"><span class="tile">R</span><b>Rupa</b></div>
+  <div class="seg" id="presets">
+    <button data-preset="rupa" aria-pressed="true">Rupa</button>
+    <button data-preset="modern-minimal" aria-pressed="false">Modern Minimal</button>
+    <button data-preset="emerald" aria-pressed="false">Emerald</button>
+  </div>
+  <button class="icon-btn" id="themeBtn" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <h1>Wireframe Design System</h1>
+    <p>A preset-driven, low-fidelity wireframe system for a Canva-style design platform. Every style is a CSS variable; swap the <b>theme preset</b> above (or toggle dark) and the whole system reskins — the same components, any project's brand.</p>
+  </header>
+
+  <section class="blk">
+    <p class="kicker">Semantic tokens · live</p>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:var(--background)"></div><span class="lbl">--background</span><span class="use">app surface</span></div>
+      <div class="sw"><div class="chip" style="background:var(--card)"></div><span class="lbl">--card</span><span class="use">raised surface</span></div>
+      <div class="sw"><div class="chip" style="background:var(--muted)"></div><span class="lbl">--muted</span><span class="use">inset / hover</span></div>
+      <div class="sw"><div class="chip" style="background:var(--secondary)"></div><span class="lbl">--secondary</span><span class="use">secondary fill</span></div>
+      <div class="sw"><div class="chip" style="background:var(--primary)"></div><span class="lbl">--primary</span><span class="use">brand / action</span></div>
+      <div class="sw"><div class="chip" style="background:var(--primary-soft)"></div><span class="lbl">--primary-soft</span><span class="use">active tint</span></div>
+      <div class="sw"><div class="chip" style="background:var(--accent)"></div><span class="lbl">--accent</span><span class="use">subtle accent</span></div>
+      <div class="sw"><div class="chip" style="background:var(--destructive)"></div><span class="lbl">--destructive</span><span class="use">danger</span></div>
+      <div class="sw"><div class="chip" style="background:var(--foreground)"></div><span class="lbl">--foreground</span><span class="use">primary text</span></div>
+      <div class="sw"><div class="chip" style="background:var(--muted-foreground)"></div><span class="lbl">--muted-foreground</span><span class="use">meta text</span></div>
+      <div class="sw"><div class="chip" style="background:var(--border)"></div><span class="lbl">--border</span><span class="use">1.5px lines</span></div>
+      <div class="sw"><div class="chip" style="background:var(--highlight)"></div><span class="lbl">--highlight</span><span class="use">annotation</span></div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <p class="kicker">Type · --font-sans / serif / mono</p>
+    <div class="types">
+      <div class="r"><span class="m">--font-sans 800</span><span style="font:800 30px var(--font-sans)">Mau desain apa hari ini?</span></div>
+      <div class="r"><span class="m">--font-serif 500</span><span style="font:500 24px var(--font-serif)">Semua proyek Anda, satu tempat.</span></div>
+      <div class="r"><span class="m">--font-mono 500</span><span style="font:500 15px var(--font-mono);color:var(--muted-foreground)">A4 · Private · 10 bulan lalu</span></div>
+      <div class="r"><span class="m">body 15/22</span><span style="font:400 15px var(--font-sans)">Cari desain, folder, dan unggahan</span></div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <p class="kicker">Live preview · reskins with the preset</p>
+    <div class="preview">
+      <div class="pcard">
+        <h4>Buttons</h4>
+        <div class="row">
+          <button class="btn primary">Buat desain</button>
+          <button class="btn outline">Bagikan</button>
+          <button class="btn ghost">Batal</button>
+        </div>
+      </div>
+      <div class="pcard">
+        <h4>Input · nav · badges</h4>
+        <div class="input"><span class="ring"></span> Cari desain…</div>
+        <div class="navpill" style="margin-top:12px">
+          <span class="on">Beranda</span><span>Proyek</span><span>Merek</span>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <span class="badge new">Baru</span><span class="badge soft">Pro</span><span class="badge mut">Private</span>
+        </div>
+      </div>
+      <div class="pcard">
+        <h4>Card</h4>
+        <div class="thumb ds-hatch">[ preview ]</div>
+        <div style="font:600 14px var(--font-sans);margin-top:10px">Konten Instagram</div>
+        <div style="font:500 11px var(--font-mono);color:var(--subtle-foreground)">Diedit 7 bulan lalu</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <p class="kicker">What's in the system</p>
+    <div class="grid">
+      <div class="card"><h3>Foundations</h3><p>Semantic tokens (shadcn-compatible) + derived scale.</p><code>styles.css · tokens/ · themes/</code></div>
+      <div class="card"><h3>Theme presets</h3><p>Drop-in, per-project. Rupa · Modern Minimal · Emerald.</p><div class="pills"><span class="pill">[data-preset]</span><span class="pill">light + dark</span></div></div>
+      <div class="card"><h3>Components — 29</h3><p>Reusable primitives, 6 groups, variables only.</p><div class="pills"><span class="pill">layout</span><span class="pill">navigation</span><span class="pill">actions</span><span class="pill">content</span><span class="pill">feedback</span><span class="pill">overlay</span></div></div>
+      <div class="card"><h3>Guidelines</h3><p>Foundation + preset specimen cards.</p><code>guidelines/</code></div>
+      <div class="card"><h3>UI kit — Design Platform</h3><p>6 screens + overlays composed from the primitives.</p><code>ui_kits/design-platform/</code></div>
+      <div class="card"><h3>Interactive reference</h3><p>The standalone wireframe — preset + theme live.</p><code>Design Platform Wireframe.dc.html</code></div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <p class="kicker">Open</p>
+    <div class="links">
+      <a class="lk primary" href="./Design Platform Wireframe.dc.html">▶ Interactive wireframe</a>
+      <a class="lk" href="./ui_kits/design-platform/index.html">UI kit</a>
+      <a class="lk" href="./guidelines/brand-presets.html">Theme presets</a>
+      <a class="lk" href="./guidelines/type-families.html">Type</a>
+    </div>
+  </section>
+
+  <section class="blk">
+    <div class="note"><b>Reuse across projects.</b> Add a project theme = drop one file in <code>themes/</code> (same token contract as <code>themes/rupa.css</code>) and set <code>data-preset</code>. Component cards + the UI-kit preview render in the <b>Design System</b> tab once the bundle compiles; foundations render immediately.</div>
+  </section>
+</div>
+
+<script>
+  (function () {
+    var html = document.documentElement;
+    var seg = document.getElementById("presets");
+    var buttons = [].slice.call(seg.querySelectorAll("button"));
+    function sync() {
+      var p = html.dataset.preset || "rupa";
+      buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.preset === p)); });
+    }
+    seg.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      html.dataset.preset = b.dataset.preset;
+      try { localStorage.setItem("ds-preset", b.dataset.preset); } catch (e) {}
+      sync();
+    });
+    document.getElementById("themeBtn").addEventListener("click", function () {
+      var dark = html.dataset.theme === "dark";
+      if (dark) { delete html.dataset.theme; } else { html.dataset.theme = "dark"; }
+      try { localStorage.setItem("ds-theme", dark ? "light" : "dark"); } catch (e) {}
+    });
+    sync();
+  })();
+</script>
+</body>
+</html>
