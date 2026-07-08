@@ -1,0 +1,75 @@
+<!-- @dsCard group="Components" viewport="700x560" subtitle="Thumb · Avatar · Card · Carousel · DataTable · TableRow" name="Content Display" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; padding: 22px; background: var(--background); }
+  .grp { margin-bottom: 22px; }
+  .h { font: 700 10px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--subtle-foreground); margin: 0 0 10px; }
+  .rowline { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .fallback { font-family: var(--font-mono); font-size: 12px; color: var(--muted-foreground); border: 1.5px dashed var(--border); border-radius: 10px; padding: 16px; }
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+function findDS() {
+  const known = ["Thumb","Avatar","Card","Carousel","DataTable","TableRow","Button","Badge","NavigationRail","AppShell","ModalDialog"];
+  const cands = [window];
+  for (const k of Object.getOwnPropertyNames(window)) { let v; try { v = window[k]; } catch (e) { continue; } if (v && typeof v === "object") cands.push(v); }
+  let best = {}, score = -1;
+  for (const c of cands) { let s = 0; for (const n of known) if (typeof c[n] === "function") s++; if (s > score) { score = s; best = c; } }
+  return best;
+}
+const DS = findDS();
+const { Thumb, Avatar, Card, Carousel, DataTable } = DS;
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+function Demo() {
+  return (
+    <div>
+      <div className="grp">
+        <p className="h">Thumb — ratios &amp; Avatar</p>
+        <div className="rowline">
+          <div style={{ width: 70 }}><Thumb ratio="1:1" caption="1:1" /></div>
+          <div style={{ width: 70 }}><Thumb ratio="4:5" caption="4:5" /></div>
+          <div style={{ width: 110 }}><Thumb ratio="4:3" caption="4:3" /></div>
+          <Avatar initials="NP" />
+          <Avatar initials="NP" variant="team" size={34} />
+        </div>
+      </div>
+      <div className="grp">
+        <p className="h">Card — carousel of tiles</p>
+        <Carousel>
+          <div style={{ width: 170 }}><Card title="Presentasi" thumbCaption="template" /></div>
+          <div style={{ width: 170 }}><Card title="Konten Instagram" ratio="4:5" thumbCaption="IG" badge="Baru" meta="Diedit 7 bln lalu" /></div>
+          <div style={{ width: 170 }}><Card title="Poster" thumbCaption="poster" /></div>
+          <div style={{ width: 170 }}><Card title="Undangan" thumbCaption="cetak" /></div>
+        </Carousel>
+      </div>
+      <div className="grp">
+        <p className="h">DataTable</p>
+        <DataTable
+          rows={[
+            { name: "Unggahan", owner: "Private", type: "Folder", edited: "10 bulan lalu" },
+            { name: "Konten Instagram Promo Akhir Pekan", owner: "Private", type: "Konten Instagram (4:5)", edited: "7 bulan lalu" },
+            { name: "Proposal Kerja Sama.pdf", sub: "Unggahan", owner: "—", type: "A4", edited: "10 bulan lalu" },
+          ]}
+          rowMenu={[{ label: "Ganti nama" }, { label: "Duplikat" }, { label: "Bagikan" }, { label: "Hapus" }]}
+        />
+      </div>
+    </div>
+  );
+}
+
+if (typeof Card === "function") root.render(<Demo />);
+else document.getElementById("root").innerHTML = '<div class="fallback">Components render once the design-system bundle is compiled (_ds_bundle.js).</div>';
+</script>
+</body>
+</html>

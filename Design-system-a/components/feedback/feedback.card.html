@@ -1,0 +1,73 @@
+<!-- @dsCard group="Components" viewport="700x460" subtitle="Badge · EmptyState · Tooltip · Toast · Progress" name="Feedback & Status" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; padding: 22px; background: var(--background); }
+  .grp { margin-bottom: 22px; }
+  .h { font: 700 10px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--subtle-foreground); margin: 0 0 10px; }
+  .rowline { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  .fallback { font-family: var(--font-mono); font-size: 12px; color: var(--muted-foreground); border: 1.5px dashed var(--border); border-radius: 10px; padding: 16px; }
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+function findDS() {
+  const known = ["Badge","EmptyState","Tooltip","Toast","Progress","Button","Card","NavigationRail","AppShell"];
+  const cands = [window];
+  for (const k of Object.getOwnPropertyNames(window)) { let v; try { v = window[k]; } catch (e) { continue; } if (v && typeof v === "object") cands.push(v); }
+  let best = {}, score = -1;
+  for (const c of cands) { let s = 0; for (const n of known) if (typeof c[n] === "function") s++; if (s > score) { score = s; best = c; } }
+  return best;
+}
+const DS = findDS();
+const { Badge, EmptyState, Tooltip, Toast, Progress } = DS;
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+function Demo() {
+  return (
+    <div>
+      <div className="grp">
+        <p className="h">Badge — tones</p>
+        <div className="rowline">
+          <Badge tone="new">Baru</Badge>
+          <Badge>🔒 Private</Badge>
+          <Badge tone="outline">Beta</Badge>
+          <Badge tone="outline">Gratis</Badge>
+          <Badge tone="highlight">★</Badge>
+        </div>
+      </div>
+      <div className="grp">
+        <p className="h">Toast · Tooltip · Progress</p>
+        <div className="rowline" style={{ marginBottom: 16 }}>
+          <Toast icon="★" message="Ditambahkan ke berbintang" action="Urungkan" />
+          <Tooltip label="Notifikasi" placement="top">
+            <button style={{ width: 40, height: 40, borderRadius: 10, border: "1.5px solid var(--border)", background: "var(--card)", cursor: "pointer", fontFamily: "var(--font-mono)" }}>◻</button>
+          </Tooltip>
+        </div>
+        <div style={{ maxWidth: 280 }}><Progress variant="skeleton" lines={3} /></div>
+        <div style={{ maxWidth: 280, marginTop: 12 }}><Progress variant="bar" value={65} /></div>
+      </div>
+      <div className="grp">
+        <p className="h">EmptyState</p>
+        <div style={{ maxWidth: 320, border: "1.5px solid var(--border)", borderRadius: 12, background: "var(--card)" }}>
+          <EmptyState glyph="◔" body="Notifikasi Anda akan muncul di sini." />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+if (typeof Badge === "function") root.render(<Demo />);
+else document.getElementById("root").innerHTML = '<div class="fallback">Components render once the design-system bundle is compiled (_ds_bundle.js).</div>';
+</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!-- @dsCard group="Components" viewport="700x540" subtitle="Button · CommandSearch · QuickActionBar · FilterBar · ViewToggle · Fab" name="Actions & Input" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; padding: 22px; background: var(--background); }
+  .grp { margin-bottom: 22px; }
+  .h { font: 700 10px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--subtle-foreground); margin: 0 0 10px; }
+  .rowline { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .fallback { font-family: var(--font-mono); font-size: 12px; color: var(--muted-foreground); border: 1.5px dashed var(--border); border-radius: 10px; padding: 16px; }
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+// The compiler bundles every exported component under one global namespace.
+// Discover it at runtime so this card is namespace-agnostic.
+function findDS() {
+  const known = ["Button","CommandSearch","QuickActionBar","FilterBar","ViewToggle","Fab","Dropdown",
+    "Card","Badge","NavigationRail","AppShell","ModalDialog","Avatar","EmptyState","Toast","Tooltip",
+    "Carousel","DataTable","PopoverMenu","ContextMenu","Backdrop","CloseButton","NavItem","Breadcrumb",
+    "Tabs","Progress","Drawer","Thumb","MainRegion","SecondarySidebar","RightPanel"];
+  const cands = [window];
+  for (const k of Object.getOwnPropertyNames(window)) {
+    let v; try { v = window[k]; } catch (e) { continue; }
+    if (v && typeof v === "object") cands.push(v);
+  }
+  let best = {}, score = -1;
+  for (const c of cands) {
+    let s = 0; for (const n of known) if (typeof c[n] === "function") s++;
+    if (s > score) { score = s; best = c; }
+  }
+  return best;
+}
+const DS = findDS();
+const { Button, CommandSearch, QuickActionBar, FilterBar, ViewToggle, Fab } = DS;
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+function Demo() {
+  const [view, setView] = React.useState("list");
+  return (
+    <div>
+      <div className="grp">
+        <p className="h">Button — variants</p>
+        <div className="rowline">
+          <Button variant="primary" icon="+">Buat desain</Button>
+          <Button variant="outline">Bagikan</Button>
+          <Button variant="ghost">Batal</Button>
+          <Button variant="dark" icon="★">Coba Pro gratis</Button>
+          <Button variant="primary" disabled>Disabled</Button>
+        </div>
+      </div>
+      <div className="grp">
+        <p className="h">CommandSearch — search &amp; AI input</p>
+        <div style={{ display: "grid", gap: "12px", maxWidth: 560 }}>
+          <CommandSearch placeholder="Cari desain, folder, dan unggahan" />
+          <CommandSearch variant="input" placeholder="Jelaskan ide Anda…" />
+        </div>
+      </div>
+      <div className="grp">
+        <p className="h">QuickActionBar</p>
+        <QuickActionBar items={[
+          { key: "t", label: "Template" },
+          { key: "m", label: "Lapisan Ajaib", badge: "Baru" },
+          { key: "p", label: "Presentasi" },
+          { key: "v", label: "Video" },
+          { key: "d", label: "Doc" },
+        ]} />
+      </div>
+      <div className="grp">
+        <p className="h">FilterBar + ViewToggle</p>
+        <FilterBar
+          align="start"
+          filters={[
+            { key: "jenis", label: "Jenis", options: ["Semua", "Presentasi", "Video"] },
+            { key: "pemilik", label: "Pemilik", options: ["Siapa saja", "Dimiliki saya"] },
+            { key: "tanggal", label: "Tanggal diubah", options: ["Kapan saja", "7 hari terakhir"] },
+          ]}
+          view={view}
+          onViewChange={setView}
+        />
+      </div>
+      <div style={{ position: "relative", height: 60 }}>
+        <p className="h">Fab</p>
+        <Fab icon="?" title="Bantuan" style={{ position: "static" }} />
+      </div>
+    </div>
+  );
+}
+
+if (typeof Button === "function") {
+  root.render(<Demo />);
+} else {
+  document.getElementById("root").innerHTML =
+    '<div class="fallback">Components render once the design-system bundle is compiled (_ds_bundle.js).</div>';
+}
+</script>
+</body>
+</html>
